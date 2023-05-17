@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:next_gen_first_app/pages/monitor_page.dart';
 
 class UniversalAppBar extends StatelessWidget {
   final String title ;
   const UniversalAppBar({super.key, required this.title});
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return  Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -15,7 +16,7 @@ class UniversalAppBar extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children:  <Widget>[
-            DrawerHeader(
+            const DrawerHeader(
               decoration: BoxDecoration( color: Colors.blue),
               child: Text(
                 'Menu',
@@ -26,22 +27,22 @@ class UniversalAppBar extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
+              leading: const Icon(Icons.home),
+              title: const Text('Home'),
               onTap: (){
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Profile'),
+              leading: const Icon(Icons.account_circle),
+              title: const Text('Profile'),
               onTap: () {
                 Navigator.pop(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
               onTap: () {
                 Navigator.pop(context);
                 // Navigate to the settings screen
@@ -50,7 +51,7 @@ class UniversalAppBar extends StatelessWidget {
           ],
         ),
       ),
-      body: Container(),
+      body: const MonitorPage(),
     );
   }
 }
