@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.6.5
+  flutter_svg: ^2.0.5
 
 dev_dependencies:
   flutter_test:
@@ -18,3 +19,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/shoot.svg
