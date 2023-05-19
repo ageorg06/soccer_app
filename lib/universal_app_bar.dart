@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:next_gen_first_app/pages/monitor_page.dart';
 
 class UniversalAppBar extends StatelessWidget {
-  final String title ;
+  final ValueNotifier<String> title ;
   const UniversalAppBar({super.key, required this.title});
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return  Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: ValueListenableBuilder<String>(
+          valueListenable: title,
+          builder: (context, value, child) {
+            return Text(value);
+          }
+        ),
       ),
       drawer: Drawer(
         child: ListView(
@@ -51,7 +57,7 @@ class UniversalAppBar extends StatelessWidget {
           ],
         ),
       ),
-      body: const MonitorPage(),
+      body: MonitorPage(titleNotifier: title,),
     );
   }
 }

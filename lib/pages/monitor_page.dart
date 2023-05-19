@@ -3,8 +3,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:next_gen_first_app/utils/scale.dart';
 
 class MonitorPage extends StatefulWidget {
- 
-  const MonitorPage({Key? key}) : super(key: key);  
+  final ValueNotifier<String> titleNotifier;
+  const MonitorPage({Key? key, required this.titleNotifier}) : super(key: key);  
   @override
   _MonitorPageState createState() => _MonitorPageState();
 }
@@ -12,15 +12,17 @@ class MonitorPage extends StatefulWidget {
 class _MonitorPageState extends State<MonitorPage> {
   int _selectedPlayer = 0;
   List<String> action = List<String>.generate(22, (index) => 'Action ${index + 1}');
+  List<String> players = List<String>.generate(11, (index) => 'Player ${index + 1}');
+  @override
   Widget build(BuildContext context) {
     Scale scale = Scale(context as BuildContext);
     double playerContainerHeight = 40;
     return Scaffold(
       body: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
           Expanded(
-            flex: 1,
+            //!TODO: Check the flex value 
+            flex: 2,
             child: ListView.builder(
               itemCount: 11,
               itemBuilder: (BuildContext context, int index) {
@@ -28,15 +30,17 @@ class _MonitorPageState extends State<MonitorPage> {
                   onTap: (){
                     setState(() {
                       _selectedPlayer = index;
+                      widget.titleNotifier.value = players[index];
                     });
                   },
-                  child: _buildPlayerContainer(playerContainerHeight, _selectedPlayer==index)
+                  child: _buildPlayerContainer(players[index], playerContainerHeight, _selectedPlayer==index)
                 );
               },
             ),
           ),
           Expanded(
-            flex: 3,
+            //!TODO: Check the flex value 
+            flex: 13,
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constrains){
                 int numColumns = (constrains.maxWidth/100).floor();
@@ -51,7 +55,7 @@ class _MonitorPageState extends State<MonitorPage> {
                   itemCount: action.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
-                      margin: EdgeInsets.all(10),
+                      margin: EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         boxShadow:[
@@ -107,22 +111,24 @@ class _MonitorPageState extends State<MonitorPage> {
   
 }
 
-Widget _buildPlayerContainer(double height, bool isSelected) {
+Widget _buildPlayerContainer(String name, double height, bool isSelected) {
   return FractionallySizedBox(
     alignment: Alignment.centerLeft,
-    widthFactor: 0.2,
+    widthFactor: 1,
     child: Container(
       height: height,
-      margin: EdgeInsets.symmetric(vertical: height/4),
+      margin: EdgeInsets.symmetric(vertical: 5),
       color: isSelected? Colors.blue : Colors.white,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CircleAvatar(
             radius: 20,
             backgroundColor: Colors.grey,
           ),
           SizedBox(width: 10,),
-          Text('Ach Geo'),
+          Text(name), //!FIXME: Make this text dynamic to fit in container
+          SizedBox(width: 10,),
           Text('1'),
         ],
       ),

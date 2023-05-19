@@ -17,7 +17,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: UniversalAppBar(title: "idk"),
+        body: UniversalAppBar(title: ValueNotifier<String>("Choose Player")),
       ),
     );
   }
