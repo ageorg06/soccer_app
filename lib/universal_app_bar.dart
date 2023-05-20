@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:next_gen_first_app/pages/monitor_page.dart';
+import 'package:next_gen_first_app/pages/teams_page.dart';
 
 class UniversalAppBar extends StatelessWidget {
   final ValueNotifier<String> title ;
@@ -57,7 +58,8 @@ class UniversalAppBar extends StatelessWidget {
           ],
         ),
       ),
-      body: MonitorPage(titleNotifier: title,),
+      body: TeamsPage(titleNotifier: title),
+      // body: MonitorPage(titleNotifier: title,),
     );
   }
 }
