@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:next_gen_first_app/pages/monitor_page.dart';
+import 'package:next_gen_first_app/pages/players_team.dart';
 import 'package:next_gen_first_app/pages/teams_page.dart';
 
 class UniversalAppBar extends StatelessWidget {

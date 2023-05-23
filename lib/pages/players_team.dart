@@ -1,18 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:next_gen_first_app/pages/players_team.dart';
-import 'package:next_gen_first_app/utils/teams.dart';
+import 'package:next_gen_first_app/utils/players.dart';
 
-class TeamsPage extends StatefulWidget {
-  final ValueNotifier<String> titleNotifier;
-  const TeamsPage({super.key, required this.titleNotifier});
+class PlayersPage extends StatefulWidget {
+  final String team;
+  const PlayersPage({super.key, required ValueNotifier<String> titleNotifier, required this.team});
+
 
   @override
-  State<TeamsPage> createState() => _TeamsPageState();
+  State<PlayersPage> createState() => _PlayersPageState();
 }
 
-class _TeamsPageState extends State<TeamsPage> {
-  Teams instance = Teams();
+class _PlayersPageState extends State<PlayersPage> {
+  late Stream<QuerySnapshot> _playersStream;
+  @override
+  void initState() {
+    super.initState();
+    _playersStream = FirebaseFirestore.instance.collection('teams').doc(widget.team).collection('players').snapshots();
+  }
+  Players instance = Players();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +28,7 @@ class _TeamsPageState extends State<TeamsPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: StreamBuilder(
-        stream: instance.snapshots(),
+        stream: _playersStream,
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
           if (streamSnapshot.hasError) {
             return Center(
@@ -38,24 +44,12 @@ class _TeamsPageState extends State<TeamsPage> {
                   margin: const EdgeInsets.all(10),
                   child: ListTile(
                     leading: Image.network(documentSnapshot['photo_uri']),
-                    title: Text(documentSnapshot['name']),
-                    subtitle: Text("Division: ${documentSnapshot['division']}"),
+                    title: Text(documentSnapshot['first_name']),
+                    subtitle: Text("Kit number: ${documentSnapshot['number']}"),
                     trailing: SizedBox(
-                      width: 150,
+                      width: 100,
                       child: Row(
                         children: [
-                          IconButton(
-                            onPressed: () => Navigator.push(
-                              context, 
-                              MaterialPageRoute(
-                                builder: (context) => PlayersPage(
-                                  titleNotifier: widget.titleNotifier,
-                                  team: documentSnapshot.id
-                                )
-                              )
-                            ), 
-                            icon: const Icon(Icons.arrow_forward)
-                          ),
                           IconButton(
                             onPressed: ()=> _update(context, documentSnapshot),
                             icon: const Icon(Icons.edit)
