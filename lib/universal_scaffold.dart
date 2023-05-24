@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:next_gen_first_app/pages/players_team.dart';
+import 'package:next_gen_first_app/pages/monitor_page.dart';
 import 'package:next_gen_first_app/pages/teams_page.dart';
 
-class UniversalAppBar extends StatelessWidget {
-  final ValueNotifier<String> title ;
-  const UniversalAppBar({super.key, required this.title});
+class UniversalScaffold extends StatelessWidget {
+  final ValueNotifier<String> title;
+  final Widget body;
+
+  const UniversalScaffold({
+    required this.title,
+    required this.body,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    return  Scaffold(
+    ValueNotifier<String> titleNotifier = ValueNotifier<String>("Home");
+    return Scaffold(
       appBar: AppBar(
         title: ValueListenableBuilder<String>(
           valueListenable: title,
           builder: (context, value, child) {
             return Text(value);
-          }
+          },
         ),
       ),
       drawer: Drawer(
@@ -38,6 +43,31 @@ class UniversalAppBar extends StatelessWidget {
               title: const Text('Home'),
               onTap: (){
                 Navigator.pop(context);
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => UniversalScaffold(
+                      title: titleNotifier,
+                      body: MonitorPage(titleNotifier: titleNotifier)
+                    )
+                  )
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.sports_soccer),
+              title: const Text('Teams'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => UniversalScaffold(
+                      title: titleNotifier,
+                      body: TeamsPage(titleNotifier: titleNotifier)
+                    )
+                  )
+                );
               },
             ),
             ListTile(
@@ -57,9 +87,8 @@ class UniversalAppBar extends StatelessWidget {
             ),
           ],
         ),
-      ),
-      body: TeamsPage(titleNotifier: title),
-      // body: MonitorPage(titleNotifier: title,),
+      ),// Define your drawer here
+      body: body,
     );
   }
 }

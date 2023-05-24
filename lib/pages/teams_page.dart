@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:next_gen_first_app/pages/players_team.dart';
 import 'package:next_gen_first_app/utils/teams.dart';
 
+import '../universal_scaffold.dart';
+
 class TeamsPage extends StatefulWidget {
   final ValueNotifier<String> titleNotifier;
   const TeamsPage({super.key, required this.titleNotifier});
@@ -45,15 +47,18 @@ class _TeamsPageState extends State<TeamsPage> {
                       child: Row(
                         children: [
                           IconButton(
-                            onPressed: () => Navigator.push(
-                              context, 
-                              MaterialPageRoute(
-                                builder: (context) => PlayersPage(
-                                  titleNotifier: widget.titleNotifier,
-                                  team: documentSnapshot.id
+                            onPressed: () {
+                              ValueNotifier<String> titleNotifier = ValueNotifier<String>("Choose a player");
+                              Navigator.push(
+                                context, 
+                                MaterialPageRoute(
+                                  builder: (context) => UniversalScaffold(
+                                  title: titleNotifier,
+                                  body: PlayersPage(titleNotifier: titleNotifier, team: documentSnapshot.id,)
+                                  )
                                 )
-                              )
-                            ), 
+                              );
+                            }, 
                             icon: const Icon(Icons.arrow_forward)
                           ),
                           IconButton(
