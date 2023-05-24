@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:next_gen_first_app/utils/scale.dart';
-
-import '../utils/make_dummy.dart';
-
 class MonitorPage extends StatefulWidget {
   final ValueNotifier<String> titleNotifier;
   const MonitorPage({Key? key, required this.titleNotifier}) : super(key: key);  
