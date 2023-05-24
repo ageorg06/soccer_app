@@ -2,12 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Players{
-  final CollectionReference _players = FirebaseFirestore.instance.collection('teams').doc('teamId').collection('players');
+  final String teamId;
+  late final CollectionReference _players ;
   final TextEditingController _countryController = TextEditingController();
   final TextEditingController _positionController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
 
+  Players(this.teamId){
+    _players = FirebaseFirestore.instance.collection('teams').doc(teamId).collection('players');
+  }
+  
   @override
   CollectionReference get instance => _players;
   Future<void> update(BuildContext context, [DocumentSnapshot? documentSnapshot]) async{

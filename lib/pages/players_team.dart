@@ -12,13 +12,14 @@ class PlayersPage extends StatefulWidget {
 }
 
 class _PlayersPageState extends State<PlayersPage> {
+  late Players instance;
   late Stream<QuerySnapshot> _playersStream;
   @override
   void initState() {
     super.initState();
     _playersStream = FirebaseFirestore.instance.collection('teams').doc(widget.team).collection('players').snapshots();
+    instance = Players(widget.team);
   }
-  Players instance = Players();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
