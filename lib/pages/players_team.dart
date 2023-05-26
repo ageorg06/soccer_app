@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:next_gen_first_app/utils/players.dart';
+import 'package:next_gen_first_app/controllers/players_controller.dart';
 
 class PlayersPage extends StatefulWidget {
   final String team;
