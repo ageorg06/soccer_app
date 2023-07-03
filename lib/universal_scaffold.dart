@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:next_gen_first_app/pages/monitor_page.dart';
 import 'package:next_gen_first_app/pages/teams_page.dart';
+import 'package:next_gen_first_app/utils/app_colors.dart';
 
 class UniversalScaffold extends StatelessWidget {
   final ValueNotifier<String> title;
@@ -29,11 +30,11 @@ class UniversalScaffold extends StatelessWidget {
           padding: EdgeInsets.zero,
           children:  <Widget>[
             const DrawerHeader(
-              decoration: BoxDecoration( color: Colors.blue),
+              decoration: BoxDecoration( color: AppColors.primaryColor),
               child: Text(
                 'Menu',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.onPrimaryColor,
                   fontSize: 24,
                 ),
               ),
