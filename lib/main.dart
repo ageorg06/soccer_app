@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:next_gen_first_app/pages/monitor_page.dart';
 import 'package:next_gen_first_app/universal_scaffold.dart';
-
-import 'utils/app_colors.dart';
+import 'package:next_gen_first_app/utils/colors.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,20 +19,19 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     ValueNotifier<String> titleNotifier = ValueNotifier<String>("Home");
     return MaterialApp(
-      theme:  ThemeData(
-        colorScheme: const ColorScheme(
-          primary: AppColors.primaryColor,
-          secondary: AppColors.secondaryColor,
-          secondaryVariant: AppColors.secondaryVariantColor,
-          surface: AppColors.surfaceColor,
-          background: AppColors.backgroundColor,
-          error: Colors.red,  // required, choose an appropriate color
-          onPrimary: AppColors.onPrimaryColor,
-          onSecondary: Colors.white,  // required, choose an appropriate color
-          onSurface: Colors.black,  // required, choose an appropriate color
-          onBackground: Colors.black,  // required, choose an appropriate color
-          onError: Colors.white,  // required, choose an appropriate color
-          brightness: Brightness.light,  // choose either light or dark
+      theme:  ThemeData.from(
+          colorScheme:  const ColorScheme(
+            brightness: Brightness.light,
+            primary: primaryColor,
+            onPrimary: Colors.white,
+            secondary: secondaryColor,
+            onSecondary: Colors.black,
+            error: Colors.red,
+            onError: Colors.white,
+            onBackground: Colors.black,
+            surface: surfaceColor,
+            background: backgroundColor, 
+            onSurface: Colors.grey, 
         ),
       ),
       debugShowCheckedModeBanner: false,

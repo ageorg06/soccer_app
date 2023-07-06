@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:next_gen_first_app/pages/monitor_page.dart';
 import 'package:next_gen_first_app/pages/teams_page.dart';
-import 'package:next_gen_first_app/utils/app_colors.dart';
+import 'package:next_gen_first_app/widgets/countdownTimer.dart';
 
 class UniversalScaffold extends StatelessWidget {
   final ValueNotifier<String> title;
@@ -18,23 +18,30 @@ class UniversalScaffold extends StatelessWidget {
     ValueNotifier<String> titleNotifier = ValueNotifier<String>("Home");
     return Scaffold(
       appBar: AppBar(
-        title: ValueListenableBuilder<String>(
-          valueListenable: title,
-          builder: (context, value, child) {
-            return Text(value);
-          },
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ValueListenableBuilder<String>(
+              valueListenable: title,
+              builder: (context, value, child) {
+                return Text(value);
+              },
+            ),
+            SizedBox(width: 10), 
+            Expanded(child: CountdownTimer()), //!TODO: Here is the problem 
+          ],
         ),
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children:  <Widget>[
-            const DrawerHeader(
-              decoration: BoxDecoration( color: AppColors.primaryColor),
+             DrawerHeader(
+              decoration: BoxDecoration( color:Theme.of(context).colorScheme.primary),
               child: Text(
                 'Menu',
                 style: TextStyle(
-                  color: AppColors.onPrimaryColor,
+                  color: Theme.of(context).colorScheme.onPrimary,
                   fontSize: 24,
                 ),
               ),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:next_gen_first_app/utils/scale.dart';
-
-import '../utils/app_colors.dart';
 class MonitorPage extends StatefulWidget {
   final ValueNotifier<String> titleNotifier;
   const MonitorPage({Key? key, required this.titleNotifier}) : super(key: key);  
@@ -12,8 +10,17 @@ class MonitorPage extends StatefulWidget {
 
 class _MonitorPageState extends State<MonitorPage> {
   int _selectedPlayer = 0;
+  late List<int> _actionCounts ;
   List<String> action = List<String>.generate(22, (index) => 'Action ${index + 1}');
   List<String> players = List<String>.generate(11, (index) => 'Player ${index + 1}');
+
+
+  @override
+  void initState() {
+    super.initState();
+    _actionCounts = List<int>.generate(action.length, (index) => 0); // Initialize all counts to 0
+  }
+
   @override
   Widget build(BuildContext context) {
     Scale scale = Scale(context as BuildContext);
@@ -23,7 +30,7 @@ class _MonitorPageState extends State<MonitorPage> {
           children: [
           Expanded(
             //!TODO: Check the flex value 
-            flex: 2,
+            flex: 3,
             child: ListView.builder(
               itemCount: 11,
               itemBuilder: (BuildContext context, int index) {
@@ -42,7 +49,7 @@ class _MonitorPageState extends State<MonitorPage> {
           ),
           Expanded(
             //!TODO: Check the flex value 
-            flex: 13,
+            flex: 25,
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constrains){
                 int numColumns = (constrains.maxWidth/100).floor();
@@ -56,48 +63,72 @@ class _MonitorPageState extends State<MonitorPage> {
                   ),
                   itemCount: action.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: AppColors.backgroundColor,
-                        boxShadow:[
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: Offset(0,3),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Stack(
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.center,
-                            child: SvgPicture.asset(
-                              "assets/shoot.svg",
-                              width: 65,
-                              height: 65,
-                            ),
-                          ),
-                          Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: 0,  
-                            child: Container(
-                              color: Colors.grey[200],
-                              padding: EdgeInsets.symmetric(vertical: 5),
-                              child: Text(
-                                action[index],
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                    return GestureDetector(
+                      onTap: () => {
+                        setState((){
+                          _actionCounts[index]++; // Increment the count for this container
+                        })
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.background,
+                          boxShadow:[
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0,3),
                             )
-                          ),
-                        ],
+                          ],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Stack(
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.center,
+                              child: SvgPicture.asset(
+                                "assets/shoot.svg",
+                                width: 65,
+                                height: 65,
+                              ),
+                            ),
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,  
+                              child: Container(
+                                color: Colors.grey[200],
+                                padding: EdgeInsets.symmetric(vertical: 5),
+                                child: Text(
+                                  _actionCounts[index].toString(), 
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              )
+                            ),
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              top: 0,  
+                              child: Container(
+                                color: Colors.grey[200],
+                                padding: EdgeInsets.symmetric(vertical: 5),
+                                child: Text(
+                                  action[index],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              )
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
