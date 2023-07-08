@@ -24,7 +24,7 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
       icon: const Icon(Icons.arrow_downward),
       iconSize: 24,
       elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
+      style:  TextStyle(color: Theme.of(context).colorScheme.onBackground),
       underline: Container(
         height: 2,
         color: Colors.deepPurpleAccent,

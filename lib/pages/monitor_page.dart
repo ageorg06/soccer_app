@@ -75,6 +75,7 @@ class _MonitorPageState extends State<MonitorPage> {
                           color: Theme.of(context).colorScheme.background,
                           boxShadow:[
                             BoxShadow(
+                              // color: Theme.of(context).colorScheme.background,
                               color: Colors.grey.withOpacity(0.5),
                               spreadRadius: 5,
                               blurRadius: 7,
@@ -98,6 +99,7 @@ class _MonitorPageState extends State<MonitorPage> {
                               right: 0,
                               bottom: 0,  
                               child: Container(
+                                // color: Theme.of(context).colorScheme.onbackground,
                                 color: Colors.grey[200],
                                 padding: EdgeInsets.symmetric(vertical: 5),
                                 child: Text(
@@ -151,7 +153,7 @@ Widget _buildPlayerContainer(String name, double height, bool isSelected) {
     child: Container(
       height: height,
       margin: EdgeInsets.symmetric(vertical: 5),
-      color: isSelected? Colors.blue : Colors.white,
+      color: isSelected? const Color(0xFF5E35B1) : Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -160,9 +162,21 @@ Widget _buildPlayerContainer(String name, double height, bool isSelected) {
             backgroundColor: Colors.grey,
           ),
           SizedBox(width: 10,),
-          Text(name), //!FIXME: Make this text dynamic to fit in container
+          Text(
+            name,
+            style: TextStyle(
+              color:isSelected? Colors.white : const Color(0xFF5E35B1),
+              fontSize: 16
+            ),
+          ), //!FIXME: Make this text dynamic to fit in container
           SizedBox(width: 10,),
-          Text('1'),
+          Text(
+            '1',
+            style: TextStyle(
+              color:isSelected? Colors.white : const Color(0xFF5E35B1),
+              fontSize: 16
+            ),
+          ),
         ],
       ),
     ),

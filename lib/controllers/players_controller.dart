@@ -101,7 +101,8 @@ class Players{
                         items: positions.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value, style: const TextStyle(color: Colors.black),),
+                            child: Text(value, style: 
+                           TextStyle(color: Theme.of(context).colorScheme.onPrimary),),
                           );
                         }).toList(),
                       ),
@@ -208,7 +209,7 @@ class Players{
                           items: positions.map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text(value, style: const TextStyle(color: Colors.black),),
+                              child: Text(value, style:  TextStyle(color: Theme.of(context).colorScheme.onPrimary),),
                             );
                           }).toList(),
                       ),

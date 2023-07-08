@@ -62,7 +62,7 @@ class _CountdownTimerState extends State<CountdownTimer> {
                 child: Container(
                   width: 1,
                   height: 10,
-                  color: Colors.red,
+                  color: Theme.of(context).colorScheme.onBackground,
                 ),
               ),
             ],
