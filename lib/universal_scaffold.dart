@@ -3,6 +3,8 @@ import 'package:next_gen_first_app/pages/monitor_page.dart';
 import 'package:next_gen_first_app/pages/teams_page.dart';
 import 'package:next_gen_first_app/widgets/countdownTimer.dart';
 
+import 'utils/auth_request_handler.dart';
+
 class UniversalScaffold extends StatelessWidget {
   final ValueNotifier<String> title;
   final Widget body;
@@ -15,6 +17,7 @@ class UniversalScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthRequestHandler _requestHandler = AuthRequestHandler();
     ValueNotifier<String> titleNotifier = ValueNotifier<String>("Home");
     return Scaffold(
       appBar: AppBar(
@@ -93,6 +96,13 @@ class UniversalScaffold extends StatelessWidget {
                 // Navigate to the settings screen
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Log out'),
+              onTap: (){
+                _requestHandler.signOut();
+              },
+            )
           ],
         ),
       ),// Define your drawer here

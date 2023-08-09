@@ -1,9 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:next_gen_first_app/pages/login_signup_page.dart';
 import 'package:next_gen_first_app/pages/monitor_page.dart';
 import 'package:next_gen_first_app/universal_scaffold.dart';
 import 'package:next_gen_first_app/utils/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,10 +37,38 @@ class MainApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: UniversalScaffold(
-        title: titleNotifier,
-        body: MonitorPage(titleNotifier: titleNotifier),
-        )
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (BuildContext context, AsyncSnapshot<User?> snapshot){
+          if (snapshot.hasError) {
+            return UniversalScaffold(
+              title: titleNotifier,
+              body: Center(
+                child: Text('Error: ${snapshot.error}'),
+              ),
+            );
+          }
+          if(snapshot.connectionState == ConnectionState.active){
+            User? user = snapshot.data;
+            if(user == null){
+              return UniversalScaffold(
+                title: titleNotifier,
+                body:  LoginSignupUI(),
+              );
+            }
+            return UniversalScaffold(
+              title: titleNotifier,
+              body: MonitorPage(titleNotifier: titleNotifier),
+            );
+          } else {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        },
+      )
     );
   }
 }
