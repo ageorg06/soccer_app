@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:next_gen_first_app/pages/monitor_page.dart';
-import 'package:next_gen_first_app/pages/teams_page.dart';
-import 'package:next_gen_first_app/widgets/countdownTimer.dart';
-
-import 'utils/auth_request_handler.dart';
+import 'feautures/auth/auth_controller.dart';
+import 'feautures/monitor/monitor_page.dart';
+import 'feautures/teams/teams_page.dart';
+import 'shared/widgets/countdown_timer.dart';
 
 class UniversalScaffold extends StatelessWidget {
   final ValueNotifier<String> title;

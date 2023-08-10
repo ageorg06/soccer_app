@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:next_gen_first_app/pages/players_team.dart';
-import 'package:next_gen_first_app/controllers/teams_controller.dart';
-import 'package:next_gen_first_app/universal_scaffold.dart';
+
+import '../../universal_scaffold.dart';
+import 'teams_controller.dart';
+import '../players/players_page.dart';
 
 class TeamsPage extends StatefulWidget {
   final ValueNotifier<String> titleNotifier;

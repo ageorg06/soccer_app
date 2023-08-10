@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:next_gen_first_app/utils/auth_request_handler.dart';
+
+import 'auth_controller.dart';
 
 class LoginSignupUI extends StatefulWidget {
   const LoginSignupUI({super.key});

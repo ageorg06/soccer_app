@@ -1,5 +1,5 @@
-import 'package:next_gen_first_app/utils/auth.dart';
 
+import 'auth_services.dart';
 
 class AuthRequestHandler{
   final Auth _auth = Auth();
