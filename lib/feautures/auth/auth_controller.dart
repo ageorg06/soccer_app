@@ -1,6 +1,6 @@
 // auth_controller.dart
 
-import 'auth_services.dart';
+import '../../core/services/auth_services.dart';
 
 class AuthRequestHandler {
   final Auth _auth = Auth();

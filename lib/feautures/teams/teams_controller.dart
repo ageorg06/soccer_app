@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/models/team.dart';
+
 class Teams{
   final CollectionReference _teams = FirebaseFirestore.instance.collection('teams');
 
@@ -9,12 +11,12 @@ class Teams{
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _divisionController = TextEditingController();
 
-  Future<void> update(BuildContext context, [DocumentSnapshot? documentSnapshot]) async{
-    if(documentSnapshot != null){
-      _nameController.text = documentSnapshot['name'];
-      _countryController.text = documentSnapshot['country'];
-      _divisionController.text = documentSnapshot['division'].toString();
-      _positionController.text = documentSnapshot['position'].toString();
+  Future<void> update(BuildContext context, [Team? team]) async{
+    if(team != null){
+      _nameController.text = team.name;
+      _countryController.text = team.country;
+      _divisionController.text = team.division.toString();
+      _positionController.text = team.position.toString();
     }
 
     await showModalBottomSheet(
@@ -57,7 +59,7 @@ class Teams{
                   final int? division = int.tryParse(_divisionController.text);
                   final int? position = int.tryParse(_positionController.text);
                   if(division!=null){
-                    await _teams.doc(documentSnapshot!.id).update({"name":name, "division":division, "country":country, "position":position });
+                    await _teams.doc(team!.id).update({"name":name, "division":division, "country":country, "position":position });
                   }
                 },
                 child: const Text("Update")
@@ -137,8 +139,8 @@ class Teams{
     );
   }
 
-  Stream<QuerySnapshot> snapshots() {
-    return _teams.snapshots();
+  Stream<List<Team>> snapshots() {
+    return _teams.snapshots().map((querySnapshot) => querySnapshot.docs.map((doc) => Team.fromDocumentSnapshot(doc)).toList());
   }
   
 }

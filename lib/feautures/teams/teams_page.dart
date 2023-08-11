@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/models/team.dart';
 import '../../universal_scaffold.dart';
 import '../players/players_page.dart';
 import 'teams_controller.dart';
@@ -16,7 +17,7 @@ class TeamsPage extends StatefulWidget {
 
 class _TeamsPageState extends State<TeamsPage> {
   final Teams _instance = Teams();
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,8 +27,8 @@ class _TeamsPageState extends State<TeamsPage> {
     );
   }
   
-  Future<void> _update(BuildContext context, [DocumentSnapshot? documentSnapshot]) async {
-     await _instance.update(context, documentSnapshot);
+  Future<void> _update(BuildContext context, [Team? team]) async {
+     await _instance.update(context, team);
   }
   
   Future<void> _create(BuildContext context, [DocumentSnapshot? documentSnapshot]) async {
@@ -46,16 +47,17 @@ class _TeamsPageState extends State<TeamsPage> {
   }
   
   Widget _buildBody() {
-    return StreamBuilder(
+    return StreamBuilder<List<Team>>(
       stream: _instance.snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
-        if (streamSnapshot.hasError) {
+      builder: (context, snapshot){
+        if (snapshot.hasError) {
           return Center(
-            child: Text("Error: ${streamSnapshot.error}"),
+            child: Text("Error: ${snapshot.error}"),
           );
         }
-        if(streamSnapshot.hasData){
-          return _buildListView(streamSnapshot.data);
+        if(snapshot.hasData){
+          List<Team> teams = snapshot.data!;
+          return _buildListView(teams);
         }
         return const Center(
           child: CircularProgressIndicator(),
@@ -64,43 +66,43 @@ class _TeamsPageState extends State<TeamsPage> {
     );
   }
   
-  Widget _buildListView(QuerySnapshot<Object?>? data) {
+  Widget _buildListView(List<Team> teams) {
     return ListView.builder(
-      itemCount: data!.docs.length, //number of rows
+      itemCount: teams.length, //number of rows
       itemBuilder:(context, index){
-        final DocumentSnapshot documentSnapshot = data.docs[index];
-        return _buildListItem(documentSnapshot);
+        Team team = teams[index];
+        return _buildListItem(team);
       }
     );
   }
   
-  Widget _buildListItem(DocumentSnapshot<Object?> documentSnapshot) {
+  Widget _buildListItem(Team team) {
     return Card(
       margin: const EdgeInsets.all(10),
       child: ListTile(
-        leading: Image.network(documentSnapshot['photo_uri']),
-        title: Text(documentSnapshot['name']),
-        subtitle: Text("Division: ${documentSnapshot['division']}"),
-        trailing: _buildActionButtons(documentSnapshot)
+        leading: Image.network(team.photoUri),
+        title: Text(team.name),
+        subtitle: Text("Division: ${team.division}"),
+        trailing: _buildActionButtons(team)
       ),
     );        
   }
   
-  _buildActionButtons(DocumentSnapshot<Object?> documentSnapshot) {
-    SizedBox(
+  _buildActionButtons(Team team) {
+    return SizedBox(
       width: 150,
       child: Row(
         children: [
           IconButton(
-            onPressed: () => _navigateToPlayers(documentSnapshot.id), 
+            onPressed: () => _navigateToPlayers(team.id), 
             icon: const Icon(Icons.arrow_forward)
           ),
           IconButton(
-            onPressed: ()=> _update(context, documentSnapshot),
+            onPressed: ()=> _update(context, team),
             icon: const Icon(Icons.edit)
           ),
           IconButton(
-            onPressed: ()=> _delete(context, documentSnapshot.id),
+            onPressed: ()=> _delete(context, team.id),
             icon: const Icon(Icons.delete)
           )
         ],

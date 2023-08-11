@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'players_services.dart';
+import '../../core/services/players_services.dart';
 
 class Players{
   final PlayersServices _services; 
