@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 
 class Teams{
   final CollectionReference _teams = FirebaseFirestore.instance.collection('teams');
+
   final TextEditingController _countryController = TextEditingController();
   final TextEditingController _positionController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _divisionController = TextEditingController();
-  @override
-  CollectionReference get instance => _teams;
-  Future<void> update(BuildContext context, [DocumentSnapshot? documentSnapshot]) async{
 
+  Future<void> update(BuildContext context, [DocumentSnapshot? documentSnapshot]) async{
     if(documentSnapshot != null){
       _nameController.text = documentSnapshot['name'];
       _countryController.text = documentSnapshot['country'];

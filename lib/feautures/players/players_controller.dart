@@ -1,25 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'players_services.dart';
 
 class Players{
-  final String teamId;
-  late final CollectionReference _players ;
+  final PlayersServices _services; 
   final TextEditingController _countryController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
   final TextEditingController _dateOfBirthController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  DateTime? pickedDate ;
+  DateTime? pickedDate;
   String dropdownValue = 'GK';
   List<String> positions = ['-', 'GK', 'DEF', 'MID', 'FW'];
-
-  Players(this.teamId){
-    _players = FirebaseFirestore.instance.collection('teams').doc(teamId).collection('players');
-  }
-  
-  @override
-  CollectionReference get instance => _players;
+  final CollectionReference _players = FirebaseFirestore.instance.collection('players');
+  Players(String teamId): _services = PlayersServices(teamId);
   Future<void> update(BuildContext context, [DocumentSnapshot? documentSnapshot]) async{
 
     if(documentSnapshot != null){
@@ -224,15 +218,16 @@ class Players{
                       final String position = dropdownValue;
                       final String dateOfBirth = _dateOfBirthController.text;
                       final String lastName = _lastNameController.text;
-                      if(number!=null && firstName.isNotEmpty && country.isNotEmpty && position!='-' && dateOfBirth.isNotEmpty){
-                        //!TODO: Do other validations
-                        //!TODO: Add also the picture input
-                        await _players.add({"first_name":firstName, "last_name": lastName,"number":number, "country":country, "position":position, "date_of_birth":dateOfBirth, "photo_uri":"https://firebasestorage.googleapis.com/v0/b/soccer-app-5af3d.appspot.com/o/none_logo.png?alt=media&token=4d1c5d1f-0900-4fad-85de-766f5167734b"});
-                        _numberController.text = '' ;
-                        _firstNameController.text = '' ;
-                        _countryController.text = '' ;
-                        _dateOfBirthController.text = '' ;
-                        _lastNameController.text = '' ;
+                      if (number != null && firstName.isNotEmpty && country.isNotEmpty && position != '-' && dateOfBirth.isNotEmpty) {
+                        await _services.addPlayer({
+                          "first_name": firstName,
+                          "last_name": lastName,
+                          "number": number,
+                          "country": country,
+                          "position": position,
+                          "date_of_birth": dateOfBirth,
+                          "photo_uri": "https://firebasestorage.googleapis.com/v0/b/soccer-app-5af3d.appspot.com/o/none_logo.png?alt=media&token=4d1c5d1f-0900-4fad-85de-766f5167734b"
+                        }); 
                         // ignore: use_build_context_synchronously
                         Navigator.of(context).pop();
                       }
@@ -247,7 +242,11 @@ class Players{
       }
     );
   }
-  
+
+  Stream<QuerySnapshot> getPlayersStream() {
+    return _services.getPlayersStream();
+  }
+
   Future<void> deleteIt(BuildContext context, String teamId) async{
     await _players.doc(teamId).delete();
 

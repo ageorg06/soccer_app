@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:next_gen_first_app/shared/utils/scale.dart';
 
 class MonitorPage extends StatefulWidget {
   final ValueNotifier<String> titleNotifier;

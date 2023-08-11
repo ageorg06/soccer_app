@@ -1,14 +1,15 @@
+// auth_controller.dart
 
 import 'auth_services.dart';
 
-class AuthRequestHandler{
+class AuthRequestHandler {
   final Auth _auth = Auth();
 
-  Future<void> login(String email, String password) async{
-    try{
+  Future<void> login(String email, String password) async {
+    try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      print("Login succesfully");
-    }catch(e){
+      print("Login successfully");
+    } catch (e) {
       print("Error logging in: $e");  // Debugging print statement
       throw e;
     }

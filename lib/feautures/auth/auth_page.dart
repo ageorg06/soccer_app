@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'auth_controller.dart';
 
 class LoginSignupUI extends StatefulWidget {
@@ -37,6 +36,7 @@ class _LoginSignupUIState extends State<LoginSignupUI> {
                 ElevatedButton(
                   onPressed: () async{
                     try {
+                      print("Button pressed");
                       await _requestHandler.login(_emailController.text, _passwordController.text);
                     }catch(e){
                       print("Error in UI: $e");
