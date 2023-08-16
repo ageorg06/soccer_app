@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../core/models/player.dart';
 import '../../core/services/players_services.dart';
 
 class Players{
@@ -14,15 +15,21 @@ class Players{
   List<String> positions = ['-', 'GK', 'DEF', 'MID', 'FW'];
   final CollectionReference _players = FirebaseFirestore.instance.collection('players');
   Players(String teamId): _services = PlayersServices(teamId);
-  Future<void> update(BuildContext context, [DocumentSnapshot? documentSnapshot]) async{
 
-    if(documentSnapshot != null){
-      _firstNameController.text = documentSnapshot['first_name'];
-      _lastNameController.text = documentSnapshot['last_name'];
-      _countryController.text = documentSnapshot['country'];
-      _numberController.text = documentSnapshot['number'].toString();
-      _dateOfBirthController.text = documentSnapshot['date_of_birth'];
-      dropdownValue = documentSnapshot['position'];
+  Stream<List<Player>> snapshots() {
+    return _players.snapshots().map((querySnapshot) => 
+      querySnapshot.docs.map((doc) => Player.fromDocumentSnapshot(doc)).toList()
+    );
+  }
+  Future<void> update(BuildContext context, [Player? player]) async{
+
+    if(player != null){
+      _firstNameController.text = player.firstName;
+      _lastNameController.text = player.lastName;
+      _countryController.text = player.country;
+      _numberController.text = player.number.toString();
+      _dateOfBirthController.text = player.dateOfBirth;
+      dropdownValue = player.position;
     }
 
     await showModalBottomSheet(
@@ -103,7 +110,7 @@ class Players{
                     ],
                   ),
                   const SizedBox(height: 20,),
-                  ElevatedButton(
+              ElevatedButton(
                     onPressed: () async{
                       final String firstName = _firstNameController.text;
                       final String country = _countryController.text;
@@ -111,13 +118,30 @@ class Players{
                       final String position = dropdownValue;
                       final String dateOfBirth = _dateOfBirthController.text;
                       final String lastName = _lastNameController.text;
-                      //!TODO: Do other validations
-                      //!TODO: Add also the picture input
-                      if(number!=null && firstName.isNotEmpty && country.isNotEmpty && position!='-' && dateOfBirth.isNotEmpty){
-                        await _players.doc(documentSnapshot!.id).update({"first_name":firstName, "last_name":lastName, "number":number, "country":country, "position":position, "date_of_birth":dateOfBirth});
-                        // ignore: use_build_context_synchronously
-                        Navigator.of(context).pop();
-                      }
+
+                      if(number !=null && firstName.isNotEmpty && country.isNotEmpty && position != '-' && dateOfBirth.isNotEmpty){
+                        try{
+                          await _players.doc(player!.id).update({
+                            "first_name:" : firstName,
+                            "last_name" : lastName,
+                            "number" : number,
+                            "country" : country,
+                            "position" : position,
+                            "date_of_birth" : dateOfBirth
+                          });
+                          Navigator.of(context).pop();
+                        }catch(e){
+                          print("Error updating player: $e");
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error updating player. Please try again.'))
+                          );
+                        }
+                      } else {
+                          print("Update conditions not met. Check the input fields.");
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Please fill in all required fields.'))
+                          );
+                        }
                     },
                     child: const Text("Update")
                   )
@@ -130,7 +154,7 @@ class Players{
     );
   }
 
-  Future<void> create(BuildContext context, [DocumentSnapshot? documentSnapshot]) async{
+  Future<void> create(BuildContext context, [Player? player]) async{
     _numberController.text = '' ;
     _firstNameController.text = '' ;
     _lastNameController.text = '' ;
@@ -254,9 +278,4 @@ class Players{
       const SnackBar(content: Text('You have successfully deleted a product'))
     );
   }
-
-  Stream<QuerySnapshot> snapshots() {
-    return _players.snapshots();
-  }
-  
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../../core/models/player.dart';
 import 'players_controller.dart';
 
 class PlayersPage extends StatefulWidget {
@@ -38,22 +39,23 @@ class _PlayersPageState extends State<PlayersPage> {
             );
           }
           if (streamSnapshot.hasData) {
-            return ListView.builder(
-              itemCount: streamSnapshot.data!.docs.length, //number of rows
+            List<Player> players = streamSnapshot.data!.docs.map((doc) => Player.fromDocumentSnapshot(doc)).toList();
+            return ListView.builder( 
+              itemCount: players.length, //number of rows
               itemBuilder: (context, index) {
-                final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
+                Player player = players[index];
                 return Card(
                   margin: const EdgeInsets.all(10),
                   child: ListTile(
-                    leading: Image.network(documentSnapshot['photo_uri']),
-                    title: Text(documentSnapshot['first_name']),
-                    subtitle: Text("Kit number: ${documentSnapshot['number']}"),
+                    leading: Image.network(player.photoUri),
+                    title: Text(player.firstName),
+                    subtitle: Text("Kit number: ${player.number}"),
                     trailing: SizedBox(
                       width: 100,
                       child: Row(
                         children: [
-                          IconButton(onPressed: () => _update(context, documentSnapshot), icon: const Icon(Icons.edit)),
-                          IconButton(onPressed: () => _delete(context, documentSnapshot.id), icon: const Icon(Icons.delete))
+                          IconButton(onPressed: () => _update(context, player), icon: const Icon(Icons.edit)),
+                          IconButton(onPressed: () => _delete(context, player.id), icon: const Icon(Icons.delete))
                         ],
                       ),
                     ),
@@ -70,12 +72,12 @@ class _PlayersPageState extends State<PlayersPage> {
     );
   }
 
-  Future<void> _update(BuildContext context, [DocumentSnapshot? documentSnapshot]) async {
-    await instance.update(context, documentSnapshot);
+  Future<void> _update(BuildContext context, [Player? player]) async {
+    await instance.update(context, player);
   }
 
-  Future<void> _create(BuildContext context, [DocumentSnapshot? documentSnapshot]) async {
-    await instance.create(context, documentSnapshot);
+  Future<void> _create(BuildContext context, [Player? player]) async {
+    await instance.create(context, player);
   }
 
   Future<void> _delete(BuildContext context, String teamId) async {

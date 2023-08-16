@@ -1,6 +1,10 @@
-// auth_controller.dart
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:next_gen_first_app/feautures/teams/teams_page.dart';
+import 'package:next_gen_first_app/feautures/users/user_controller.dart';
 import '../../core/services/auth_services.dart';
+import '../users/user_page.dart';
 
 class AuthRequestHandler {
   final Auth _auth = Auth();
@@ -15,10 +19,24 @@ class AuthRequestHandler {
     }
   }
 
-  Future<void> signup(String email, String password) async {
+  Future<void> signup(String email, String password, BuildContext context) async {
     try {
-      await _auth.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       print("Signed up successfully");  // Debugging print statement
+      
+      // Create a new user document in Firestore
+      FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+        'email': email,
+        'username': '',  // Empty for now, can be updated later
+        'teamId': null,  // Null for now, can be updated later
+      });
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserPage(userId: userCredential.user!.uid),
+        ),
+      );
     } catch (e) {
       print("Error signing up: $e");  // Debugging print statement
       throw e;

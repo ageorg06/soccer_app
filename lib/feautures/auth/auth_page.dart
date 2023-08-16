@@ -47,7 +47,11 @@ class _LoginSignupUIState extends State<LoginSignupUI> {
                 ElevatedButton(
                   onPressed: () async{
                     try {
-                      await _requestHandler.signup(_emailController.text, _passwordController.text);
+                      await _requestHandler.signup(
+                        _emailController.text,
+                       _passwordController.text,
+                       context
+                      );
                     }catch(e){
                       print("Error in UI: $e");
                     }
